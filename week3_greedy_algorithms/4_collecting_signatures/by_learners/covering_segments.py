@@ -9,21 +9,30 @@ def optimal_points(segments):
 	# ( set of pairs of integers ) -> list of integers # really a set, because they will be unique
 	# [ (4,7), (1,3) , (2, 5) , (5,6) ] --> [3,6]
 #    pdb.set_trace()
-    points = {}
-    #write your code here
-    for s in segments:
-        points[s.end] = s.start
-    return r_points( points )
+	points = {}
+	#write your code here
+	for s in segments:
+		if s.end in points :
+			points[s.end].append( s.start )
+		else :
+			points[s.end] = [s.start]
+
+	return r_points( points )
 
 def r_points( points ) :
-	# ( dict{ r-point : l-point } -> list of optimal r-points
+#	pdb.set_trace()
+	# ( dict{ r-point : [ list of l-point] } -> list of optimal r-points
 	if not points :
 		return []
 	r = min( points.keys() )	# get the left-most right-point
 	reduced_points = {}
 	for r_point in points.keys() :
-		if points[r_point] > r :
-			reduced_points[ r_point ] = points[r_point]
+		for l_point in points[r_point] :		# confusing, but points.r_point is a list of l-points..
+			if l_point > r :
+				if r_point in reduced_points :
+					reduced_points[ r_point ].append( l_point )
+				else :
+					reduced_points[ r_point ] = [l_point]
 		
 	return [ r ] + r_points( reduced_points )
 		
