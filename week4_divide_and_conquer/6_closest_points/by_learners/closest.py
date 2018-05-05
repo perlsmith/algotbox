@@ -40,15 +40,12 @@ def fast_min_dist( x, y, l, r, x1, y1 , n ) :		# pass n so you don't have to com
 				continue
 			else :
 				for j in range( i+1, min(i+7,n) ) :
-					if ( x1[i] - x_div ) * (x1[j] - x_div ) > 0	: 	# both on the same side of the line => discard..
-						continue
+					if abs(y1[j] - y1[i]) > d  or abs(x1[j] - x1[i]) > d :
+						break
 					else :
-						if y1[j] - y1[i] > d :
-							break
-						else :
-							dist = ( (x1[i] - x1[j])**2 + (y1[i] - y1[j])**2 )**0.5
-							if dist < d :
-								d = dist
+						dist = ( (x1[i] - x1[j])**2 + (y1[i] - y1[j])**2 )**0.5
+						if dist < d :
+							d = dist
 				
 		return d
 
