@@ -40,9 +40,11 @@ def fast_min_dist( x, y, l, r, x1, y1 , n ) :		# pass n so you don't have to com
 				continue
 			else :
 				for j in range( i+1, min(i+7,n) ) :
-					if abs(y1[j] - y1[i]) > d  or abs(x1[j] - x1[i]) > d :
+					if abs(y1[j] - y1[i]) > d  :
 						break
 					else :
+						if abs( x1[i] - x1[j]) > d : 
+							continue
 						dist = ( (x1[i] - x1[j])**2 + (y1[i] - y1[j])**2 )**0.5
 						if dist < d :
 							d = dist
