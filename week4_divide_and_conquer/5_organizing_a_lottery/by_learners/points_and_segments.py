@@ -22,7 +22,7 @@ def fast_count_segments(starts, ends, points):
 	
 	return final_cnt
 
-def traverse( starts, l_s, r_s, ends, l_e, r_e, points , l_p, r_p, counter, count_list) :
+def traverse( starts, l_s, r_s, ends, l_e, r_e, points , l_p, r_p, counter, count_list ) :
 	# sorted list of ints, index of first elem, index of last elem,
 	#		sorted list of ints , index of first elem, index of last elem,
 	#		sorted list of ints , index of first elem, index of last elem ,
@@ -42,17 +42,16 @@ def traverse( starts, l_s, r_s, ends, l_e, r_e, points , l_p, r_p, counter, coun
 	
 	p_count = 1		# this is spaghetti to handle multiple identical points
 	
-	# that is, if all three coincide, or, the point is left-most of the three candidates (queued up start/end points)
-	if (points[l_p] == starts[s_ptr] == ends[l_e]) :
-		count_list[l_p] = counter+1
-		traverse( starts, l_s, r_s, ends, l_e, r_e, points, l_p+1, r_p, counter, count_list)
-		return
-	elif (points[l_p] < starts[s_ptr] and points[l_p] < ends[l_e]) :
-		count_list[l_p] = counter
-		traverse( starts, l_s, r_s, ends, l_e, r_e, points, l_p+1, r_p, counter, count_list)
-		return
-	
 	if l_s <= r_s :		# then, process start point
+		# that is, if all three coincide, or, the point is left-most of the three candidates (queued up start/end points)
+		if (points[l_p] == starts[s_ptr] == ends[l_e]) :
+			traverse( starts, l_s+1, r_s, ends, l_e, r_e, points, l_p, r_p, counter+1, count_list)
+			return
+		elif (points[l_p] < starts[s_ptr] and points[l_p] < ends[l_e]) :
+			count_list[l_p] = counter
+			traverse( starts, l_s, r_s, ends, l_e, r_e, points, l_p+1, r_p, counter, count_list)
+			return
+	
 		if starts[l_s] == ends[l_e] :	# we have already taken care of the case of point being the left-most..
 			traverse( starts, l_s+1, r_s, ends, l_e+1, r_e, points, l_p, r_p, counter, count_list )
 		elif starts[l_s ] <= points[l_p] and starts[l_s] < ends[l_e] :
@@ -167,7 +166,7 @@ if __name__ == '__main__':
     ends   = data[3:2 * n + 2:2]
     points = data[2 * n + 2:]
     #use fast_count_segments
-    pdb.set_trace()
+    #pdb.set_trace()
     cnt = fast_count_segments(starts, ends, points)
     for x in cnt:
         print(x, end=' ')
