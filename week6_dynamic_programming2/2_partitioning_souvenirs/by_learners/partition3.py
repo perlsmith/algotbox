@@ -46,19 +46,22 @@ def optimal_weight(W, w):
 				val = V[i-1][wi-w[i-1] ] + w[i-1]	# a case of weight = value :)
 				if V[ i][wi] < val :
 					V[ i][wi] = val
-					
+	W_sav = W				
 	for i in range( n, 1, -1 ) :
-		if V[i-1][W] < V[i-1][W-w[i-1]] + w[i-1] :		# means w[i] was used
+		if w[i-1] <= W and V[i-1][W] <= V[i-1][W-w[i-1]] + w[i-1] :		# means w[i] was used
 			used.append( w[i-1] )
+			W -= w[i-1]
 					
-	return (V[n][W], used )
+	return (V[n][W_sav], used )
 	
 	
 if __name__ == '__main__':
     input = sys.stdin.read()
     n, *A = list(map(int, input.split()))
-    pdb.set_trace()
-    print(partition3(A))
+    
+	#pdb.set_trace()
+    #print(partition3( sorted(A) ))
+    print(partition3( A ))
 
 # from what I can tell, this is a knapsack with repetitions problem
 
