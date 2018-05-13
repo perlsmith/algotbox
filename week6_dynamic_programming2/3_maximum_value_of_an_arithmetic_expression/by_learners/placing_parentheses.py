@@ -78,7 +78,8 @@ def opt_split( m, M, digits, start, end , ops, ifMax  ) :
 	#  and it gives you the paranthesized digit string by calling itself recursively
 	if start == end : 
 		return str(digits[start])
-	for i, op in enumerate( ops[start:end+1] ) :
+	for i in range(start, end+1 ) :
+		op = ops[i]
 		if '+' == op :
 			if ifMax :
 				if M[start][end] == M[start][i] + M[i+1][end] :
