@@ -32,6 +32,7 @@ def MinAndMax( i, j, m, M , ops) :
 
 	
 def get_maximum_value(dataset):
+	# ( string ) --> int
     #write your code here
 	digits = list( map( int, dataset[::2] ) )
 	ops = dataset[1::2]
@@ -47,10 +48,66 @@ def get_maximum_value(dataset):
 			m[i][j], M[i][j] = MinAndMax( i, j, m, M, ops )
 	return M[0][n-1]
 
+def write_opt_expr( dataset ) :
+	# string --> string
+	# converts the string into 2 lists - positive ints and operators
+	# returns the same string with parantheses inserted..
+	digits = list( map( int, dataset[::2] ) )
+	ops = dataset[1::2]
+	n = len( digits )
+	m = []
+	M = []
+	for i in range( n ) :
+		m.append( [0] * i + [digits[i]] + [0] * ( n - i - 1 ) )
+		M.append( [0] * i + [digits[i]] + [0] * ( n - i - 1 ) )
+	for s in range( n-1 ) :
+		for i in range( n-1 - s ) :
+			j = i + s + 1		# this is essentially translating the pseudocode... the poor guys don't count like hackers :(
+			m[i][j], M[i][j] = MinAndMax( i, j, m, M, ops )
+	
+	# start with 0, n-1 - where will you insert parantheses here?
+	# start with 0,0 and 1,n-1 - that is, you go through each operator
+	# and, given the operator, you retrive the min and max of the expressions on either
+	# side and see if this split (insertion) fits the bill..
+	return opt_split( m, M, digits, 0, n-1, ops , True)
 
+def opt_split( m, M, digits, start, end , ops, ifMax  ) :
+	# 2-D list of ints, 2D list of ints, list of ints, int, int, array of strings, boolean --> string
+	# give it the min and max dynamically computed tables, and the start and end and the ops
+	# and whether you're looking for a max
+	#  and it gives you the paranthesized digit string by calling itself recursively
+	if start == end : 
+		return str(digits[start])
+	for i, op in enumerate( ops[start:end+1] ) :
+		if '+' == op :
+			if ifMax :
+				if M[start][end] == M[start][i] + M[i+1][end] :
+					return '(' + opt_split( m, M, digits, start, i, ops , True) + ')' + op + '(' + opt_split( m, M, digits, i+1, end, ops , True) + ')'
+			elif m[start][end] == m[start][i] + m[i+1][end] :
+				return '(' + opt_split( m, M, digits, start, i, ops , False) + ')' + op + '(' + opt_split( m, M, digits, i+1, end, ops, False ) + ')'
+		elif '-' == op :
+			if ifMax :
+				if M[start][end] == M[start][i] - m[i+1][end] :
+					return '(' + opt_split( m, M, digits, start, i, ops, True ) + ')' + op + '(' + opt_split( m, M, digits, i+1, end, ops , False) + ')' 
+			elif m[start][end] == m[start][i] - M[i+1][end] :
+				return '(' + opt_split( m, M, digits, start, i, ops, False ) + ')' + op + '(' + opt_split( m, M, digits, i+1, end, ops , True) + ')'
+		elif '*' == op :
+			if ifMax :
+				if M[start][end] == M[start][i] * M[i+1][end] :
+					return '(' + opt_split( m, M, digits, start, i, ops , True) + ')' + op + '(' + opt_split( m, M, digits, i+1, end, ops , True) + ')'
+				elif M[start][end] == m[start][i] * m[i+1][end] :
+					return '(' + opt_split( m, M, digits, start, i, ops , False ) + ')' + op + '(' + opt_split( m, M, digits, i+1, end, ops , False ) + ')'
+			else :	# you want a minimum
+				if m[start][end] == M[start][i] * m[i+1][end] :
+					return '(' + opt_split( m, M, digits, start, i, ops , True) + ')' + op + '(' + opt_split( m, M, digits, i+1, end, ops , False) + ')'
+				elif M[start][end] == m[start][i] * M[i+1][end] :
+					return '(' + opt_split( m, M, digits, start, i, ops , False ) + ')' + op + '(' + opt_split( m, M, digits, i+1, end, ops , True ) + ')'			
+
+	
 if __name__ == "__main__":
-    #pdb.set_trace()
-    print(get_maximum_value( list(input() ) ))
+	pdb.set_trace()
+	#print(get_maximum_value( list(input() ) ))
+	print( write_opt_expr( list(input() ) ) )	# not requested. Own initiative..
 
 
 # future work : can you add a switch so someone can easily get the minimum value
