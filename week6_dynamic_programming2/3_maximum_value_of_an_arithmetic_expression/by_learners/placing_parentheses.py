@@ -83,26 +83,26 @@ def opt_split( m, M, digits, start, end , ops, ifMax  ) :
 		if '+' == op :
 			if ifMax :
 				if M[start][end] == M[start][i] + M[i+1][end] :
-					return '(' + opt_split( m, M, digits, start, i, ops , True) + ')' + op + '(' + opt_split( m, M, digits, i+1, end, ops , True) + ')'
+					return '(' + opt_split( m, M, digits, start, i, ops , True) + op + opt_split( m, M, digits, i+1, end, ops , True) + ')'
 			elif m[start][end] == m[start][i] + m[i+1][end] :
-				return '(' + opt_split( m, M, digits, start, i, ops , False) + ')' + op + '(' + opt_split( m, M, digits, i+1, end, ops, False ) + ')'
+				return '(' + opt_split( m, M, digits, start, i, ops , False) + op + opt_split( m, M, digits, i+1, end, ops, False ) + ')'
 		elif '-' == op :
 			if ifMax :
 				if M[start][end] == M[start][i] - m[i+1][end] :
-					return '(' + opt_split( m, M, digits, start, i, ops, True ) + ')' + op + '(' + opt_split( m, M, digits, i+1, end, ops , False) + ')' 
+					return '(' + opt_split( m, M, digits, start, i, ops, True ) + op + opt_split( m, M, digits, i+1, end, ops , False) + ')' 
 			elif m[start][end] == m[start][i] - M[i+1][end] :
-				return '(' + opt_split( m, M, digits, start, i, ops, False ) + ')' + op + '(' + opt_split( m, M, digits, i+1, end, ops , True) + ')'
+				return '(' + opt_split( m, M, digits, start, i, ops, False ) + op + opt_split( m, M, digits, i+1, end, ops , True) + ')'
 		elif '*' == op :
 			if ifMax :
 				if M[start][end] == M[start][i] * M[i+1][end] :
-					return '(' + opt_split( m, M, digits, start, i, ops , True) + ')' + op + '(' + opt_split( m, M, digits, i+1, end, ops , True) + ')'
+					return '(' + opt_split( m, M, digits, start, i, ops , True) + op + opt_split( m, M, digits, i+1, end, ops , True) + ')'
 				elif M[start][end] == m[start][i] * m[i+1][end] :
-					return '(' + opt_split( m, M, digits, start, i, ops , False ) + ')' + op + '(' + opt_split( m, M, digits, i+1, end, ops , False ) + ')'
+					return '(' + opt_split( m, M, digits, start, i, ops , False ) + op + opt_split( m, M, digits, i+1, end, ops , False ) + ')'
 			else :	# you want a minimum
 				if m[start][end] == M[start][i] * m[i+1][end] :
-					return '(' + opt_split( m, M, digits, start, i, ops , True) + ')' + op + '(' + opt_split( m, M, digits, i+1, end, ops , False) + ')'
+					return '(' + opt_split( m, M, digits, start, i, ops , True) + op + opt_split( m, M, digits, i+1, end, ops , False) + ')'
 				elif M[start][end] == m[start][i] * M[i+1][end] :
-					return '(' + opt_split( m, M, digits, start, i, ops , False ) + ')' + op + '(' + opt_split( m, M, digits, i+1, end, ops , True ) + ')'			
+					return '(' + opt_split( m, M, digits, start, i, ops , False ) + op + opt_split( m, M, digits, i+1, end, ops , True ) + ')'			
 
 	
 if __name__ == "__main__":
