@@ -11,22 +11,24 @@ def evalt(a, b, op):
     else:
         assert False
 
-def MinAndMax( i, j, digits, ops ) :
+def MinAndMax( i, j, m, M , ops) :
 	# (int, int ) --> ( int, int )
 	Min = 1e18
 	Max = -1e18	# -inf essentially :)
 	if i == j :
-		return (digits[i], digits[i] )
+		return (m[i][i], M[i][i] )
 	elif j == i + 1 :
-		result = evalt( digits[i], digits[j], ops[i] )
+		result = evalt( m[i][i], m[j][j], ops[i] )
 		return (result, result )
 	else :
 		for k in range( i, j ) :
-			a = evalt( MinAndMax( i,k , digits, ops )[1], MinAndMax( k+1,j, digits, ops )[1], ops[k] ) # max, max
-			b = evalt( MinAndMax( i,k , digits, ops )[1], MinAndMax( k+1,j, digits, ops )[0], ops[k] ) # max, min
-			c = evalt( MinAndMax( i,k , digits, ops )[0], MinAndMax( k+1,j, digits, ops )[1], ops[k] ) # min, max
-			d = evalt( MinAndMax( i,k , digits, ops )[0], MinAndMax( k+1,j, digits, ops )[0], ops[k] ) # min, min
-	return (min( Min, a, b, c, d), max(Max, a, b, c, d ) )
+			a = evalt( M[i][k], M[k+1][j], ops[k] ) # max, max
+			b = evalt( M[i][k], m[k+1][j], ops[k] ) # max, min
+			c = evalt( m[i][k], M[k+1][j], ops[k] ) # min, max
+			d = evalt( m[i][k], m[k+1][j], ops[k] ) # min, min
+			Min = min( Min, a, b, c, d)
+			Max = max(Max, a, b, c, d )
+	return ( Min, Max )
 
 	
 def get_maximum_value(dataset):
@@ -42,12 +44,12 @@ def get_maximum_value(dataset):
 	for s in range( n-1 ) :
 		for i in range( n-1 - s ) :
 			j = i + s + 1		# this is essentially translating the pseudocode... the poor guys don't count like hackers :(
-			m[i][j], M[i][j] = MinAndMax( i, j, digits, ops )
+			m[i][j], M[i][j] = MinAndMax( i, j, m, M, ops )
 	return M[0][n-1]
 
 
 if __name__ == "__main__":
-    pdb.set_trace()
+    #pdb.set_trace()
     print(get_maximum_value( list(input() ) ))
 
 
