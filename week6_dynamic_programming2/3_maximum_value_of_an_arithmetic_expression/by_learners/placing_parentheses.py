@@ -76,6 +76,9 @@ def opt_split( m, M, digits, start, end , ops, ifMax  ) :
 	# give it the min and max dynamically computed tables, and the start and end and the ops
 	# and whether you're looking for a max
 	#  and it gives you the paranthesized digit string by calling itself recursively
+	# logic : start, end and ifMax tell you whether to look in m or M for the target
+	# after that, it's brute-force searching to look for a match for whether to
+	# "split here" and then, a recursive call to get the sub-expressions after the split
 	if start == end : 
 		return str(digits[start])
 	for i in range(start, end+1 ) :
